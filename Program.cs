@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace eftest
 {
     class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await using (testdbContext ctx = new testdbContext())
+            {
+                await ctx.Person.AddAsync(new Person() {Name = "Jan Joska"});
+                await ctx.SaveChangesAsync();
+                var p = await ctx.Person.FirstAsync();
+                Console.WriteLine(p);
+            }
+            Console.ReadLine();
         }
     }
 }
